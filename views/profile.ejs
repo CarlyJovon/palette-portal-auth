@@ -1,0 +1,132 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/style.css">
+
+    <title>Palette Portal</title>
+</head>
+
+<body>
+<div class="container">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header clearfix">
+        <h1><span class="fa fa-paint-brush"></span>Palette Portal</h1>
+        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="well">
+                <h3><span class="fa fa-user"></span>Profile</h3>
+                <% if (user.local.email) { %>
+                    <p><strong>Email:</strong><%= user.local.email %></p>
+                <% } %>
+            </div>
+
+            <!-- ADD A BASE COLOR -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>Add a Base Color</strong>
+            </div>
+
+            <div class="panel-body">
+                    <p>Choose a color to add to your saved palette.</p>
+            <form action="/colors" method="POST">
+                <div class="form-group">
+                    <label for="base-hex">Choose a color:</label>
+                    <input type="color" id="base-hex" name="hex" value="#007bff" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    <span class="fa fa-plus"></span>Save Base Color
+                </button>
+            </form>
+            </div>
+        </div>
+    </div>
+
+
+        <!-- SAVED PALETTE AND COLOR MIXER -->
+        <div class="col-sm-8">
+            <h3>My Color Palette</h3>
+            <p>Choose a second color, preview a 50/50 mix, and save the result as a new color.</p>
+            <% if (colors && colors.length > 0) { %>
+                <ul class="color-list"
+                    style="padding: 0; list-style: none;">
+                    <% for (var i = 0; i < colors.length; i++) { %>
+                        <li class="color-card well" data-id="<%= colors[i]._id %>" data-hex="<%= colors[i].hex %>">
+            <!--THE SAVED COLOR-->
+            <div class="row">
+                <div class="col-xs-3 text-center">
+                    <div class="swatch"
+                        style="
+                            background-color: <%= colors[i].hex %>;
+                            width: 60px;
+                            height: 60px;
+                            border-radius: 8px;
+                            border: 2px solid #ccc;
+                            margin: 0 auto;
+                        "></div>
+                </div>
+
+                <div class="col-xs-9">
+                    <h4>Saved Color</h4>
+                    <code><%= colors[i].hex %></code>
+                </div>
+
+            </div>
+            
+            <!-- CHOOSING A 2ND COLOR -->
+            <div class="mix-controls">
+                <label>Choose a second color:</label>
+                <input type="color" class="mix-picker" value="#ff0000" style="width: 65px; height: 40px;">
+                <button type="button" class="btn btn-warning btn-sm mix-btn">Preview Mix</button>
+            </div>
+
+            <!-- MIXED COLOR PREVIEW -->
+            <div style="margin-top: 12px;">
+                <p>Mixed Color Preview</p>
+                <div class="mixed-preview"
+                    style="
+                        background-color: <%= colors[i].hex %>;
+                        width: 100%;
+                        height: 55px;
+                        border: 1px solid #ccc;
+                        border-radius: 6px;
+                    ">
+                </div>
+                <p style="margin-top: 6px;">HEX:<code class="mixed-hex"><%= colors[i].hex %></code></p>
+            </div>
+
+            <!-- SAVE MIX OR DELETE ORIGINAL -->
+            <div style="margin-top: 10px;">
+                <button type="button" class="btn btn-success btn-sm save-mix-btn" disabled>
+                <span class="fa fa-save"></span>Save Mixed Color
+                </button>
+
+                <button type="button" class="btn btn-danger btn-sm delete-btn">
+                    <span class="fa fa-trash"></span>Delete
+                </button>
+            </div>
+            </li>
+        <% } %>
+    </ul>
+<% } else { %>
+    <div class="alert alert-info">
+        Your palette is empty. Choose a base color
+        on the left to get started!
+    </div>
+<% } %>
+        </div>
+    </div>
+</div>
+
+<script src="/main.js"></script>
+
+</body>
+</html>
